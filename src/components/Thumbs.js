@@ -1,9 +1,9 @@
 import React from "react";
-
+import PropTypes from "prop-types";
 class Thumbs extends React.Component {
   constructor() {
     super();
-    
+
     this.handleClick = this.handleClick.bind(this);
   }
 
@@ -33,6 +33,17 @@ class Thumbs extends React.Component {
     );
   }
 }
+
+Thumbs.propTypes = {
+  photos: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      href: PropTypes.string,
+      url: PropTypes.string
+    })
+  ),
+  onClick: PropTypes.func
+};
 
 Thumbs.defaultProps = {
   photos: [],

@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 class Search extends React.Component {
   constructor(props) {
@@ -44,6 +45,12 @@ class Search extends React.Component {
     );
   }
 }
+
+Search.propTypes = {
+  initialCity: PropTypes.string,
+  onChange: PropTypes.function,
+  onSubmit: PropTypes.function,
+};
 
 Search.defaultProps = {
   initialCity: "",

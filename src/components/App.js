@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 import Header from "./Header";
 import Photo from "./Photo";
@@ -104,6 +105,22 @@ class App extends React.Component {
     );
   }
 }
+
+App.propTypes = {
+  config: PropTypes.shape({
+    api: PropTypes.shape({
+      weather: PropTypes.string,
+      unsplash: PropTypes.string
+    })
+  }),
+  defaultImage: PropTypes.shape({
+    urls: PropTypes.shape({ regular: PropTypes.string }),
+    user: PropTypes.shape({
+      name: PropTypes.string,
+      links: PropTypes.shape({ html: PropTypes.string })
+    })
+  })
+};
 
 App.defaultProps = {
   defaultImage: {

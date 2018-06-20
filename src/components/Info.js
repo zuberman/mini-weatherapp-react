@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 const Info = ({ user, conditions }) => {
   return (
@@ -13,11 +14,19 @@ const Info = ({ user, conditions }) => {
   );
 };
 
+Info.propTypes = {
+  conditions: PropTypes.string,
+  user: PropTypes.shape({
+    url: PropTypes.string,
+    name: PropTypes.string
+  })
+};
+
 Info.defaultProps = {
   conditions: "",
-  credits: {
-    userUrl: "",
-    userName: ""
+  user: {
+    url: "",
+    name: ""
   }
 };
 
