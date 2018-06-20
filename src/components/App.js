@@ -26,17 +26,16 @@ class App extends React.Component {
     this.onCitySearch = this.onCitySearch.bind(this);
   }
 
-  componentDidMount() {
-    this.loadWeatherImages(this.apiWeather.city);
-  }
-
+  // Data loading methods
+  //----------------------------------------------------------------------------
   loadWeatherImages(city) {
     this.fetchCityConditions(city).then(this.fetchImages);
   }
 
-  fetchCityConditions(query) {
+  // Step 1
+  fetchCityConditions(city) {
     const { apiKey, url } = this.apiWeather;
-    const endpoint = `${url}?q=${query}&appid=${apiKey}`;
+    const endpoint = `${url}?q=${city}&appid=${apiKey}`;
 
     return fetch(endpoint)
       .then(res => (res.ok ? res.json() : Promise.reject(res)))
@@ -48,9 +47,10 @@ class App extends React.Component {
       .catch(err => console.log(err));
   }
 
-  fetchImages(term) {
+  // Step 2
+  fetchImages(weather) {
     const { url, apiKey } = this.apiUnsplash;
-    const endpoint = `${url}?query=${term}&client_id=${apiKey}&per_page=10`;
+    const endpoint = `${url}?query=${weather}&client_id=${apiKey}&per_page=10`;
 
     return fetch(endpoint)
       .then(res => (res.ok ? res.json() : Promise.reject()))
@@ -68,8 +68,14 @@ class App extends React.Component {
     this.loadWeatherImages(city);
   }
 
-  // Respond to changes in data
+  // React lifecycle methods
   //----------------------------------------------------------------------------
+  // Load data automatically
+  componentDidMount() {
+    this.loadWeatherImages(this.apiWeather.city);
+  }
+
+  // Respond to changes in data
   render() {
     const { mainIndex, images } = this.state;
 
