@@ -1,0 +1,109 @@
+import React from "react";
+
+import Header from "./Header";
+import Photo from "./Photo";
+import Info from "./Info";
+import Thumbs from "./Thumbs";
+import Search from "./Search";
+
+class App extends React.Component {
+  constructor(props) {
+    super();
+
+    this.apiWeather = props.config.api.weather;
+    this.apiUnsplash = props.config.api.unsplash;
+
+    this.state = {
+      city: "",
+      weather: "",
+      conditions: {},
+      images: [],
+      mainIndex: 0
+    };
+
+    this.fetchImages = this.fetchImages.bind(this);
+    this.onThumbClick = this.onThumbClick.bind(this);
+    this.onCitySearch = this.onCitySearch.bind(this);
+  }
+
+  componentDidMount() {
+    this.loadWeatherImages(this.apiWeather.city);
+  }
+
+  loadWeatherImages(city) {
+    this.fetchCityConditions(city).then(this.fetchImages);
+  }
+
+  fetchCityConditions(query) {
+    const { apiKey, url } = this.apiWeather;
+    const endpoint = `${url}?q=${query}&appid=${apiKey}`;
+
+    return fetch(endpoint)
+      .then(res => (res.ok ? res.json() : Promise.reject(res)))
+      .then(conditions => {
+        const weather = conditions.weather[0].description;
+        this.setState({ conditions, weather });
+        return weather;
+      })
+      .catch(err => console.log(err));
+  }
+
+  fetchImages(term) {
+    const { url, apiKey } = this.apiUnsplash;
+    const endpoint = `${url}?query=${term}&client_id=${apiKey}&per_page=10`;
+
+    return fetch(endpoint)
+      .then(res => (res.ok ? res.json() : Promise.reject()))
+      .then(data => this.setState({ images: data.results }))
+      .catch(err => console.log(err));
+  }
+
+  // Event handlers
+  //----------------------------------------------------------------------------
+  onThumbClick(mainIndex) {
+    this.setState({ mainIndex });
+  }
+
+  onCitySearch(city) {
+    this.loadWeatherImages(city);
+  }
+
+  // Respond to changes in data
+  //----------------------------------------------------------------------------
+  render() {
+    const { mainIndex, images } = this.state;
+
+    const mainImage = images[mainIndex] || this.props.defaultImage;
+    const user = {
+      name: mainImage.user.name,
+      url: mainImage.user.links.html
+    };
+    const photos = images.map(image => ({
+      id: image.id,
+      url: image.urls.thumb,
+      href: image.links.html
+    }));
+
+    return (
+      <div className="content">
+        <Header />
+        <Photo url={mainImage.urls.regular} />
+        <Info conditions={this.state.weather} user={user} />
+        <Thumbs photos={photos} onClick={this.onThumbClick} />
+        <Search
+          initialCity={this.apiWeather.city}
+          onSubmit={this.onCitySearch}
+        />
+      </div>
+    );
+  }
+}
+
+App.defaultProps = {
+  defaultImage: {
+    urls: { regular: "" },
+    user: { name: "", links: { html: "" } }
+  }
+};
+
+export default App;
