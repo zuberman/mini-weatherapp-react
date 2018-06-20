@@ -22,4 +22,3 @@ Using the API keys, HTML & CSS from [Mini Weather App](https://github.com/constr
 ## Support
 
 - If you are stuck for more than 20 minutes, ask us for help.
-- There is a completed version on the branch `stage/complete`
