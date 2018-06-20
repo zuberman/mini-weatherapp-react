@@ -91,16 +91,7 @@ class App extends React.Component {
     }));
 
     return (
-      <div className="content">
-        <Header />
-        <Photo url={mainImage.urls.regular} />
-        <Info conditions={this.state.weather} user={user} />
-        <Thumbs photos={photos} onClick={this.onThumbClick} />
-        <Search
-          initialCity={this.apiWeather.city}
-          onSubmit={this.onCitySearch}
-        />
-      </div>
+
     );
   }
 }
