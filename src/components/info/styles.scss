@@ -1,0 +1,36 @@
+.info {
+  display: flex;
+  justify-content: space-between;
+
+  padding: 5px 10px;
+  background: rgba(0, 0, 0, 0.5);
+  color: #ddd;
+}
+
+.info__item {
+  margin: 0;
+}
+
+.info__item > span {
+  color: #aaa;
+}
+
+.info__item > a:hover {
+  text-decoration: underline;
+}
+
+.info__item--conditions {
+  composes: info__item;
+
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.info__item--credits {
+  composes: info__item;
+}
+
+.info__item--credits span {
+  margin: 0 4px;
+}

@@ -1,6 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+import s from "./styles.scss";
+
 class Search extends React.Component {
   constructor(props) {
     super();
@@ -25,13 +27,13 @@ class Search extends React.Component {
 
   render() {
     return (
-      <div className="controls">
-        <form className="search" onSubmit={this.handleSubmit}>
-          <label className="search__label" htmlFor="search-tf">
+      <div className={s["controls"]}>
+        <form className={s["search"]} onSubmit={this.handleSubmit}>
+          <label className={s["search__label"]} htmlFor="search-tf">
             City
           </label>
           <input
-            className="search__input"
+            className={s["search__input"]}
             id="search-tf"
             name="city"
             placeholder="Enter city name"
@@ -39,7 +41,7 @@ class Search extends React.Component {
             value={this.state.city}
             onChange={this.handleChange}
           />
-          <button className="btn search__btn">Go</button>
+          <button className={s["search__btn"]}>Go</button>
         </form>
       </div>
     );
@@ -49,7 +51,7 @@ class Search extends React.Component {
 Search.propTypes = {
   initialCity: PropTypes.string,
   onChange: PropTypes.function,
-  onSubmit: PropTypes.function,
+  onSubmit: PropTypes.function
 };
 
 Search.defaultProps = {

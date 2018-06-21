@@ -1,11 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import Header from "./Header";
-import Photo from "./Photo";
-import Info from "./Info";
-import Thumbs from "./Thumbs";
-import Search from "./Search";
+import Header from "./header";
+import Photo from "./photo/index";
+import Info from "./info/index";
+import Thumbs from "./thumbs/index";
+import Search from "./search/index";
+
+import s from "./app.scss"
 
 class App extends React.Component {
   constructor(props) {
@@ -92,7 +94,7 @@ class App extends React.Component {
     }));
 
     return (
-      <div className="content">
+      <div className={s.content}>
         <Header />
         <Photo url={mainImage.urls.regular} />
         <Info conditions={this.state.weather} user={user} />

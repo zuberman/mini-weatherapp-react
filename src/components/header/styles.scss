@@ -1,0 +1,28 @@
+.header {
+  padding: 5px 10px;
+  background: rgba(0, 0, 0, 0.6);
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.title {
+  margin: 0;
+  font-weight: 400;
+  font-size: 20px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+
+  @media (min-width: 768px) {
+    .title {
+      font-weight: 100;
+    }
+  }
+}
+
+.title > i {
+  float: left;
+  font-style: inherit;
+}
+
+.title > i:last-child {
+  color: lightblue;
+}

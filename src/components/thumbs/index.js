@@ -1,5 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
+
+import s from "./styles.scss";
+
 class Thumbs extends React.Component {
   constructor() {
     super();
@@ -18,15 +21,15 @@ class Thumbs extends React.Component {
 
   render() {
     return (
-      <div className="thumbs">
+      <div className={s.thumbs}>
         {this.props.photos.map((photo, index) => (
           <a
             key={photo.id}
             href={photo.href}
-            className="thumbs__link"
+            className={s.thumbs__link}
             onClick={this.handleClick(index)}
           >
-            <img className="thumbs__link__img" src={photo.url} alt="" />
+            <img className={s.thumbs__link__img} src={photo.url} alt="" />
           </a>
         ))}
       </div>

@@ -1,0 +1,46 @@
+.thumbs {
+  display: flex;
+
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+  height: var(--thumbs-h);
+  padding: var(--thumbs-py) 0;
+  background: rgba(0, 0, 0, 0.25);
+
+  @media (min-width: 768px) {
+    justify-content: center;
+  }
+}
+
+.thumbs__link {
+  flex: 0 0 auto;
+
+  animation: 0.25s forwards fade-in;
+
+  width: var(--thumb-w);
+  height: var(--thumb-h);
+  margin: 0 1px;
+  // opacity: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.thumbs__link.active,
+.thumbs__link:hover,
+.thumbs__link:focus {
+  outline: 1px solid white;
+}
+
+.thumbs__link__img {
+  animation: 0.25s forwards fade-in;
+
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-height: var(--thumb-h);
+  // opacity: 0;
+  object-fit: cover;
+  pointer-events: none;
+}
