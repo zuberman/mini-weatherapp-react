@@ -9,24 +9,24 @@ class Search extends React.Component {
       city: props.initialCity
     };
 
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.onChange = this.onChange.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
-  handleSubmit(event) {
+  onSubmit(event) {
     event.preventDefault();
 
-    this.props.onSubmit(this.state.city);
+    this.props.onCitySearch(this.state.city);
   }
 
-  handleChange(event) {
+  onChange(event) {
     this.setState({ city: event.target.value });
   }
 
   render() {
     return (
       <div className="controls">
-        <form className="search" onSubmit={this.handleSubmit}>
+        <form className="search" onSubmit={this.onSubmit}>
           <label className="search__label" htmlFor="search-tf">
             City
           </label>
@@ -37,7 +37,7 @@ class Search extends React.Component {
             placeholder="Enter city name"
             autoComplete="city"
             value={this.state.city}
-            onChange={this.handleChange}
+            onChange={this.onChange}
           />
           <button className="btn search__btn">Go</button>
         </form>
@@ -48,14 +48,12 @@ class Search extends React.Component {
 
 Search.propTypes = {
   initialCity: PropTypes.string,
-  onChange: PropTypes.function,
-  onSubmit: PropTypes.function,
+  onCitySearch: PropTypes.func
 };
 
 Search.defaultProps = {
   initialCity: "",
-  onChange: Function.prototype,
-  onSubmit: Function.prototype
+  onCitySearch: Function.prototype
 };
 
 export default Search;

@@ -7,6 +7,8 @@ import Info from "./Info";
 import Thumbs from "./Thumbs";
 import Search from "./Search";
 
+import { ImageType } from "./_proptypes";
+
 class App extends React.Component {
   constructor(props) {
     super();
@@ -19,7 +21,7 @@ class App extends React.Component {
       weather: "",
       conditions: {},
       images: [],
-      mainIndex: 0
+      mainImage: props.defaultImage
     };
 
     this.fetchImages = this.fetchImages.bind(this);
@@ -55,14 +57,26 @@ class App extends React.Component {
 
     return fetch(endpoint)
       .then(res => (res.ok ? res.json() : Promise.reject()))
-      .then(data => this.setState({ images: data.results }))
+      .then(data => {
+        const images = data.results.map(image => ({
+          id: image.id,
+          thumb: image.urls.thumb,
+          main: image.urls.regular,
+          href: image.links.html,
+          user: {
+            name: image.user.name,
+            url: image.user.links.html
+          }
+        }));
+        this.setState({ images, mainImage: images[0] });
+      })
       .catch(err => console.log(err));
   }
 
   // Event handlers
   //----------------------------------------------------------------------------
-  onThumbClick(mainIndex) {
-    this.setState({ mainIndex });
+  onThumbClick(mainImage) {
+    this.setState({ mainImage });
   }
 
   onCitySearch(city) {
@@ -78,28 +92,17 @@ class App extends React.Component {
 
   // Respond to changes in data
   render() {
-    const { mainIndex, images } = this.state;
-
-    const mainImage = images[mainIndex] || this.props.defaultImage;
-    const user = {
-      name: mainImage.user.name,
-      url: mainImage.user.links.html
-    };
-    const photos = images.map(image => ({
-      id: image.id,
-      url: image.urls.thumb,
-      href: image.links.html
-    }));
+    const { mainImage, images, weather } = this.state;
 
     return (
       <div className="content">
         <Header />
-        <Photo url={mainImage.urls.regular} />
-        <Info conditions={this.state.weather} user={user} />
-        <Thumbs photos={photos} onClick={this.onThumbClick} />
+        <Photo url={mainImage.main} />
+        <Info weather={weather} user={mainImage.user} />
+        <Thumbs images={images} onThumbClick={this.onThumbClick} />
         <Search
           initialCity={this.apiWeather.city}
-          onSubmit={this.onCitySearch}
+          onCitySearch={this.onCitySearch}
         />
       </div>
     );
@@ -109,22 +112,26 @@ class App extends React.Component {
 App.propTypes = {
   config: PropTypes.shape({
     api: PropTypes.shape({
-      weather: PropTypes.string,
-      unsplash: PropTypes.string
+      weather: PropTypes.shape({
+        apiKey: PropTypes.string,
+        url: PropTypes.string,
+        city: PropTypes.string
+      }),
+      unsplash: PropTypes.shape({
+        apiKey: PropTypes.string,
+        url: PropTypes.string
+      })
     })
   }),
-  defaultImage: PropTypes.shape({
-    urls: PropTypes.shape({ regular: PropTypes.string }),
-    user: PropTypes.shape({
-      name: PropTypes.string,
-      links: PropTypes.shape({ html: PropTypes.string })
-    })
-  })
+  defaultImage: ImageType
 };
 
 App.defaultProps = {
   defaultImage: {
-    urls: { regular: "" },
+    id: "",
+    thumb: "",
+    main: "",
+    href: "",
     user: { name: "", links: { html: "" } }
   }
 };
