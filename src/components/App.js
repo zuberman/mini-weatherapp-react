@@ -31,46 +31,49 @@ class App extends React.Component {
 
   // Data loading methods
   //----------------------------------------------------------------------------
-  loadWeatherImages(city) {
-    this.fetchCityConditions(city).then(this.fetchImages);
-  }
-
-  // Step 1
   fetchCityConditions(city) {
     const { apiKey, url } = this.apiWeather;
-    const endpoint = `${url}?q=${city}&appid=${apiKey}`;
+    const weatherEndpoint = `${url}?q=${city}&appid=${apiKey}`;
 
-    return fetch(endpoint)
+    return fetch(weatherEndpoint)
       .then(res => (res.ok ? res.json() : Promise.reject(res)))
-      .then(conditions => {
-        const weather = conditions.weather[0].description;
-        this.setState({ conditions, weather });
-        return weather;
-      })
       .catch(err => console.log(err));
   }
 
-  // Step 2
   fetchImages(weather) {
     const { url, apiKey } = this.apiUnsplash;
-    const endpoint = `${url}?query=${weather}&client_id=${apiKey}&per_page=10`;
+    const unsplashEndpoint = `${url}?query=${weather}&client_id=${apiKey}&per_page=10`;
 
-    return fetch(endpoint)
+    return fetch(unsplashEndpoint)
       .then(res => (res.ok ? res.json() : Promise.reject()))
-      .then(data => {
-        const images = data.results.map(image => ({
-          id: image.id,
-          thumb: image.urls.thumb,
-          main: image.urls.regular,
-          href: image.links.html,
-          user: {
-            name: image.user.name,
-            url: image.user.links.html
-          }
-        }));
-        this.setState({ images, mainImage: images[0] });
-      })
       .catch(err => console.log(err));
+  }
+
+  loadWeatherImages(city) {
+    const updateWeatherState = conditions => {
+      const weather = conditions.weather[0].description;
+      this.setState({ conditions, weather });
+      return weather;
+    };
+
+    const updateImageState = results => {
+      const images = results.map(image => ({
+        id: image.id,
+        thumb: image.urls.thumb,
+        main: image.urls.regular,
+        href: image.links.html,
+        user: {
+          name: image.user.name,
+          url: image.user.links.html
+        }
+      }));
+      this.setState({ images, mainImage: images[0] });
+    };
+
+    this.fetchCityConditions(city)
+      .then(conditions => updateWeatherState(conditions))
+      .then(weather => this.fetchImages(weather))
+      .then(data => updateImageState(data.results));
   }
 
   // Event handlers
@@ -97,7 +100,7 @@ class App extends React.Component {
     return (
       <div className="content">
         <Header />
-        <Photo url={mainImage.main} />
+        <Photo url={mainImage.main} weather={weather} />
         <Info weather={weather} user={mainImage.user} />
         <Thumbs images={images} onThumbClick={this.onThumbClick} />
         <Search

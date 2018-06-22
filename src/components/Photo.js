@@ -5,14 +5,15 @@ class Photo extends React.Component {
   render() {
     return (
       <figure className="photo">
-        <img src={this.props.url} alt={this.props.url} />
+        <img src={this.props.url} alt={this.props.weather} />
       </figure>
     );
   }
 }
 
 Photo.propTypes = {
-  url: PropTypes.string
+  url: PropTypes.string,
+  weather: PropTypes.string
 };
 
 export default Photo;
