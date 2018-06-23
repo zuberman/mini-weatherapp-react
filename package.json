@@ -1,10 +1,14 @@
 {
   "name": "weather-app-react",
   "version": "1.0.0",
+  "repository": "git@github.com:constructorlabs/mini-weatherapp-react.git",
   "babel": {
     "presets": [
       "babel-preset-react",
       "babel-preset-env"
+    ],
+    "plugins": [
+      "captains-log"
     ]
   },
   "dependencies": {
@@ -15,14 +19,17 @@
     "redux": "4.0.0"
   },
   "devDependencies": {
-    "@types/react": "16.3.17",
+    "@types/react": "16.4.1",
+    "babel-cli": "6.26.0",
     "babel-jest": "23.0.1",
     "babel-loader": "^7.1.3",
+    "babel-plugin-captains-log": "1.1.0",
     "babel-preset-env": "1.7.0",
-    "babel-preset-react": "^6.24.1",
+    "babel-preset-react": "6.24.1",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
-    "eslint": "4.19.1",
+    "eslint": "5.0.0",
+    "eslint-config-recommended": "3.0.0",
     "eslint-loader": "^2.0.0",
     "eslint-plugin-react": "7.9.1",
     "fetch-mock": "6.4.4",

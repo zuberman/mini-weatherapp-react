@@ -9,6 +9,36 @@ import Search from "./Search";
 
 import { ImageType } from "./_proptypes";
 
+function fetchCityConditions({ apiKey, url }, city) {
+  const endpoint = `${url}?q=${city}&appid=${apiKey}`;
+
+  return fetch(endpoint)
+    .then(res => (res.ok ? res.json() : Promise.reject(res)))
+    .catch(err => console.log(err));
+}
+
+function fetchImages({ url, apiKey }, weather) {
+  const endpoint = `${url}?query=${weather}&client_id=${apiKey}&per_page=10`;
+
+  return fetch(endpoint)
+    .then(res => (res.ok ? res.json() : Promise.reject()))
+    .catch(err => console.log(err));
+}
+
+function parseImages(results) {
+  const images = results.map(image => ({
+    id: image.id,
+    thumb: image.urls.thumb,
+    main: image.urls.regular,
+    href: image.links.html,
+    user: {
+      name: image.user.name,
+      url: image.user.links.html
+    }
+  }));
+  return { images, mainImage: images[0] };
+}
+
 class App extends React.Component {
   constructor(props) {
     super();
@@ -24,56 +54,21 @@ class App extends React.Component {
       mainImage: props.defaultImage
     };
 
-    this.fetchImages = this.fetchImages.bind(this);
     this.onThumbClick = this.onThumbClick.bind(this);
     this.onCitySearch = this.onCitySearch.bind(this);
   }
 
   // Data loading methods
   //----------------------------------------------------------------------------
-  fetchCityConditions(city) {
-    const { apiKey, url } = this.apiWeather;
-    const weatherEndpoint = `${url}?q=${city}&appid=${apiKey}`;
-
-    return fetch(weatherEndpoint)
-      .then(res => (res.ok ? res.json() : Promise.reject(res)))
-      .catch(err => console.log(err));
-  }
-
-  fetchImages(weather) {
-    const { url, apiKey } = this.apiUnsplash;
-    const unsplashEndpoint = `${url}?query=${weather}&client_id=${apiKey}&per_page=10`;
-
-    return fetch(unsplashEndpoint)
-      .then(res => (res.ok ? res.json() : Promise.reject()))
-      .catch(err => console.log(err));
-  }
-
   loadWeatherImages(city) {
-    const updateWeatherState = conditions => {
-      const weather = conditions.weather[0].description;
-      this.setState({ conditions, weather });
-      return weather;
-    };
-
-    const updateImageState = results => {
-      const images = results.map(image => ({
-        id: image.id,
-        thumb: image.urls.thumb,
-        main: image.urls.regular,
-        href: image.links.html,
-        user: {
-          name: image.user.name,
-          url: image.user.links.html
-        }
-      }));
-      this.setState({ images, mainImage: images[0] });
-    };
-
-    this.fetchCityConditions(city)
-      .then(conditions => updateWeatherState(conditions))
-      .then(weather => this.fetchImages(weather))
-      .then(data => updateImageState(data.results));
+    fetchCityConditions(this.apiWeather, city)
+      .then(conditions => {
+        const weather = conditions.weather[0].description;
+        this.setState({ conditions, weather });
+        return weather;
+      })
+      .then(weather => fetchImages(this.apiUnsplash, weather))
+      .then(data => this.setState(parseImages(data.results)));
   }
 
   // Event handlers
