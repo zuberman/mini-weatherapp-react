@@ -18,7 +18,7 @@ In this exercise we will revisit the [Mini Weather App](https://github.com/const
 
 - CSS and some placeholder React components have been supplied for you. You can insert the main photo into the element with the id `photos` and thumbnails into the element with id `thumbs`.
 
-- Before starting to code, draw a layout diagram and a tree diagram of the components. Have a think about which component will have state and what they will store. Also, what data will need to be passed to passed to other components as props.
+- Before starting to code, draw a layout diagram and a tree diagram of the components. Have a think about which component will have state and what they will store. Think about what data will need to be passed to other components as props.
 
 ## Objectives
 
